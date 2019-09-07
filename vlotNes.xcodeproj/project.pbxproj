@@ -35,6 +35,7 @@
 		3D0A6CF52323DD2D00EB2B8B /* Cnrom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cnrom.swift; sourceTree = "<group>"; };
 		3D0A6CF72323E19100EB2B8B /* Uxrom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Uxrom.swift; sourceTree = "<group>"; };
 		3D0A6CF92323EDAD00EB2B8B /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		3D0A6CFB2323F64D00EB2B8B /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3D1A6F5322EF7DE400DE6724 /* Ppu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ppu.swift; sourceTree = "<group>"; };
 		3D331DB523043051002729E3 /* Apu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Apu.swift; sourceTree = "<group>"; };
 		3D331DB723098A0C002729E3 /* Mmc1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mmc1.swift; sourceTree = "<group>"; };
@@ -71,6 +72,7 @@
 		3D4C9C0D22E88A2F00874FBD = {
 			isa = PBXGroup;
 			children = (
+				3D0A6CFB2323F64D00EB2B8B /* README.md */,
 				3D0A6CF92323EDAD00EB2B8B /* .gitignore */,
 				3D4C9C1822E88A2F00874FBD /* vlotNes */,
 				3D4C9C1722E88A2F00874FBD /* Products */,
