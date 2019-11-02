@@ -32,6 +32,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     
     var running = false
     var lastOpened: String?
+    var romLoaded: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,7 +77,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     
     func stopWindow() {
         stopLoop()
-        if lastOpened != nil {
+        if romLoaded {
             // save battery data for the game
             saveBattery(for: lastOpened!)
         }
@@ -84,6 +85,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         pixelView.needsDisplay = true
         delegate?.setEmulationState(state: false)
         lastOpened = nil
+        romLoaded = false
     }
     
     func keyPressed(_ event: NSEvent) -> Bool {
@@ -94,14 +96,14 @@ class ViewController: NSViewController, NSWindowDelegate {
         // shortcuts for save and load state
         if event.keyCode == 45 {
             // load state
-            if lastOpened != nil {
+            if romLoaded {
                 loadState(for: lastOpened!)
             }
             return true
         }
         if event.keyCode == 46 {
             // save state
-            if lastOpened != nil {
+            if romLoaded {
                 saveState(for: lastOpened!)
             }
             return true
@@ -131,6 +133,10 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
     
     func loadRom(path: String) {
+        if romLoaded {
+            // save battery data for previous loaded game
+            saveBattery(for: lastOpened!)
+        }
         var romData: [Byte] = []
         if path.lowercased().suffix(4) == ".zip" {
             // unpack the zip
@@ -146,12 +152,9 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
         if nes.loadRom(rom: romData) {
             // loaded rom succesfully
-            if lastOpened != nil {
-                // save battery data for previous loaded game
-                saveBattery(for: lastOpened!)
-            }
             NSDocumentController.shared.noteNewRecentDocumentURL(URL(fileURLWithPath: path))
             lastOpened = path
+            romLoaded = true
             // load battery data
             loadBattery(for: lastOpened!)
             delegate?.setEmulationState(state: true)
@@ -172,7 +175,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     
     @IBAction func pause(_ sender: Any) {
         // pause menu item
-        if !running && lastOpened != nil {
+        if !running && romLoaded {
             startLoop()
         } else {
             stopLoop()
@@ -191,14 +194,14 @@ class ViewController: NSViewController, NSWindowDelegate {
     
     @IBAction func saveState(_ sender: Any) {
         // save state menu item
-        if lastOpened != nil {
+        if romLoaded {
             saveState(for: lastOpened!)
         }
     }
     
     @IBAction func loadState(_ sender: Any) {
         // load state menu item
-        if lastOpened != nil {
+        if romLoaded {
             loadState(for: lastOpened!)
         }
     }

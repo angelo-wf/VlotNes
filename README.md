@@ -11,7 +11,7 @@ Most games, however, seem to run fine.
 
 It supports mappers 0 (NROM), 1 (MMC1), 2 (UxROM), 3 (CNROM), 4 (MMC3) and 7 (AxROM).
 
-Battery saves should be supported, and so are save states. The battery saves are currently somewhat unreliable.
+Battery saves are supported, and so are save states.
 
 ## Usage
 
