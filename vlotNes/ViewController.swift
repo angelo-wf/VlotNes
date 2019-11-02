@@ -262,7 +262,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             return
         }
         let saveLocation = saveFolderLoc.appendingPathComponent(saveName).appendingPathExtension("srm")
-        if !saveByteArrayToFile(url: saveLocation, data:batteryData) {
+        if !saveByteArrayToFile(url: saveLocation, data: batteryData) {
             print("Failed to save battery file to \(saveLocation.path)")
         } else {
             print("Saved battery data to \(saveLocation.path)")
@@ -292,7 +292,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             return
         }
         let saveLocation = saveFolderLoc.appendingPathComponent(saveName).appendingPathExtension("vst")
-        if !saveByteArrayToFile(url: saveLocation, data:nes.getState()) {
+        if !saveByteArrayToFile(url: saveLocation, data: nes.getState()) {
             print("Failed to save state file to \(saveLocation.path)")
         } else {
             print("Saved state data to \(saveLocation.path)")

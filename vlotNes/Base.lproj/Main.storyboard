@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15400"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -78,8 +79,7 @@
                                             </menu>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="m54-Is-iLE"/>
-                                        <menuItem title="Reload" id="YL8-pQ-KgA">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        <menuItem title="Reload" keyEquivalent="R" id="YL8-pQ-KgA">
                                             <connections>
                                                 <action selector="reload:" target="Ady-hI-5gd" id="7dq-dg-xXD"/>
                                             </connections>
@@ -403,7 +403,7 @@
                         <outlet property="delegate" destination="Voe-Tx-rLC" id="PrD-fu-P6m"/>
                     </connections>
                 </application>
-                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="vlotNes" customModuleProvider="target">
+                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="VlotNes" customModuleProvider="target">
                     <connections>
                         <outlet property="PauseMenuItem" destination="dle-8F-zUL" id="4cE-ym-m1p"/>
                         <outlet property="loadStateMenuItem" destination="IKw-eF-hFL" id="myV-V3-uaz"/>
@@ -443,12 +443,12 @@
         <!--View Controller-->
         <scene sceneID="hIz-AP-VOD">
             <objects>
-                <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="vlotNes" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="VlotNes" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
                         <rect key="frame" x="0.0" y="0.0" width="256" height="240"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="Ccl-V4-jrH" customClass="PixelView" customModule="vlotNes" customModuleProvider="target">
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="Ccl-V4-jrH" customClass="PixelView" customModule="VlotNes" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="256" height="240"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="Ccl-V4-jrH" secondAttribute="height" multiplier="16:15" id="jNB-mr-97j"/>

@@ -11,7 +11,7 @@ import Foundation
 final class Nes: MemoryHandler {
     
     // state version
-    let stateVersion: Int = 2
+    let stateVersion: Int = 3
     
     // components
     var cpu: Cpu! = nil
@@ -292,6 +292,7 @@ final class Nes: MemoryHandler {
         s.writeInt(value: getRomHash())
         var header = mapper!.header.getAsArray()
         s.handleIntArray(&header)
+        s.writeInt(value: mapper!.version)
         handleState(s)
         s.placeInt(offset: 8, value: s.data.count) // correct length
         return s.data
@@ -317,6 +318,10 @@ final class Nes: MemoryHandler {
         s.handleIntArray(&stateHeader)
         if stateHeader != realHeader {
             return false // header does not match
+        }
+        let mapperVersion = s.readInt()
+        if mapperVersion != mapper!.version {
+            return false // mapper version does not match
         }
         // everything matches, load state
         handleState(s)

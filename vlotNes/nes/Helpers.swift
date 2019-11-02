@@ -8,6 +8,8 @@
 
 import Foundation
 
+// a bunch of smaller structs and protocols 
+
 protocol MemoryHandler: AnyObject {
     
     func peak(_ address: Word) -> Byte
@@ -22,9 +24,9 @@ protocol Mapper: AnyObject {
     var header: Header { get }
     
     var name: String { get }
-    var currentSample: Float32 { get }
+    var currentSample: Float32? { get }
     var hasBattery: Bool { get }
-    var hasAudio: Bool { get }
+    var version: Int { get }
     
     func reset(hard: Bool)
     func handleState(_ s: StateHandler)

@@ -11,7 +11,7 @@ Most games, however, seem to run fine.
 
 It supports mappers 0 (NROM), 1 (MMC1), 2 (UxROM), 3 (CNROM), 4 (MMC3) and 7 (AxROM).
 
-Battery saves are supported, and so are save states.
+Battery saves should be supported, and so are save states. The battery saves are currently somewhat unreliable.
 
 ## Usage
 
@@ -39,7 +39,7 @@ Battery saves, save states and temprary files (for .zip support) are saved in th
 
 ## Problems / Todo
 
-* Although most games run fine even with the emulation not being 100% accurate, some games do not run correctly, like Adventures of Lolo 2 and Battletoads. (interestingly, the crach that occurs when starting level 2 in Battletoads looks different than how it looks in my Javascript emulator, even though the emulation should be identical between the two.)
+* Although most games run fine even with the emulation not being 100% accurate, some games do not run correctly, like Adventures of Lolo 2 and Battletoads. (interestingly, the crash that occurs when starting level 2 in Battletoads looks different than how it looks in my Javascript emulator, even though the emulation should be identical between the two.)
 * The way drawing the screen is currently handled is quite CPU-intesive (being about 30% of the CPU usage). It also isn't always smooth.
 * The way audio is currently played means that even the slightest lag will cause the audio to start sounding scratchy. Pausing and unpausing seems to fix it.
 * The emulator in general is quite resource intensive, using about 70% of the CPU on 5th-gen Core i5. It's only barely better than my Javascript emulator.

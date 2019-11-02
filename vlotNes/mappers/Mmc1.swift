@@ -16,8 +16,8 @@ final class Mmc1: Mapper {
     
     let name: String = "MMC1"
     let hasBattery: Bool
-    let currentSample: Float32 = 0
-    let hasAudio: Bool = false
+    let currentSample: Float32? = nil
+    let version: Int = 1
     
     var ppuRam: [Byte] = [Byte](repeating: 0, count: 0x800)
     var chrRam: [Byte] = [Byte](repeating: 0, count: 0x2000)

@@ -22,7 +22,7 @@
 		3D4C9C2122E88A3000874FBD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D4C9C1F22E88A3000874FBD /* Main.storyboard */; };
 		3D4C9C2A22E88D6500874FBD /* PixelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4C9C2922E88D6500874FBD /* PixelView.swift */; };
 		3D67DA6422E9D4D4003777D8 /* Cpu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D67DA6322E9D4D4003777D8 /* Cpu.swift */; };
-		3D67DA6622E9D6CD003777D8 /* MemoryHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D67DA6522E9D6CD003777D8 /* MemoryHandler.swift */; };
+		3D67DA6622E9D6CD003777D8 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D67DA6522E9D6CD003777D8 /* Helpers.swift */; };
 		3D67DA6822E9E5B0003777D8 /* Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D67DA6722E9E5B0003777D8 /* Extentions.swift */; };
 		3D8B5C2322ECA87C00A31443 /* Nes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8B5C2222ECA87C00A31443 /* Nes.swift */; };
 		3D8B5C2522ECAE4900A31443 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8B5C2422ECAE4900A31443 /* Util.swift */; };
@@ -50,7 +50,7 @@
 		3D4C9C2322E88A3000874FBD /* vlotNes.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = vlotNes.entitlements; sourceTree = "<group>"; };
 		3D4C9C2922E88D6500874FBD /* PixelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixelView.swift; sourceTree = "<group>"; };
 		3D67DA6322E9D4D4003777D8 /* Cpu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cpu.swift; sourceTree = "<group>"; };
-		3D67DA6522E9D6CD003777D8 /* MemoryHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryHandler.swift; sourceTree = "<group>"; };
+		3D67DA6522E9D6CD003777D8 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		3D67DA6722E9E5B0003777D8 /* Extentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extentions.swift; sourceTree = "<group>"; };
 		3D8B5C2222ECA87C00A31443 /* Nes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Nes.swift; sourceTree = "<group>"; };
 		3D8B5C2422ECAE4900A31443 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
@@ -109,7 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				3D67DA6322E9D4D4003777D8 /* Cpu.swift */,
-				3D67DA6522E9D6CD003777D8 /* MemoryHandler.swift */,
+				3D67DA6522E9D6CD003777D8 /* Helpers.swift */,
 				3D67DA6722E9E5B0003777D8 /* Extentions.swift */,
 				3D8B5C2222ECA87C00A31443 /* Nes.swift */,
 				3D1A6F5322EF7DE400DE6724 /* Ppu.swift */,
@@ -219,7 +219,7 @@
 				3D331DBC230C2DF2002729E3 /* StateHandler.swift in Sources */,
 				3D0A6CF82323E19100EB2B8B /* Uxrom.swift in Sources */,
 				3D4C9C2A22E88D6500874FBD /* PixelView.swift in Sources */,
-				3D67DA6622E9D6CD003777D8 /* MemoryHandler.swift in Sources */,
+				3D67DA6622E9D6CD003777D8 /* Helpers.swift in Sources */,
 				3D331DBA230C0D6A002729E3 /* Mmc3.swift in Sources */,
 				3D8B5C2522ECAE4900A31443 /* Util.swift in Sources */,
 				3D1A6F5422EF7DE400DE6724 /* Ppu.swift in Sources */,
