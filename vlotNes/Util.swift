@@ -10,31 +10,36 @@ import Foundation
 
 // utulity functions
 
-func loadFileAsByteArray(path: String) -> [Byte] {
-    var bytes: [Byte] = []
+enum FileError: Error {
+    case fileReadError
+    case fileWriteError
+    case zipLoadError(details: String)
+}
+
+func loadFileAsByteArray(path: String) throws -> [Byte] {
     if let data = NSData(contentsOfFile: path) {
         var buffer = [Byte](repeating: 0, count: data.length)
         data.getBytes(&buffer, length: data.length)
-        bytes = buffer
+        return buffer
+    } else {
+        throw FileError.fileReadError
     }
-    return bytes
 }
 
-func loadFileAsStringArray(path: String) -> [String] {
+func loadFileAsStringArray(path: String) throws -> [String] {
     do {
         let text = try String(contentsOfFile: path)
         return text.split(separator: "\n").map(String.init)
     } catch {
-        return []
+        throw FileError.fileReadError
     }
 }
 
-func saveByteArrayToFile(url: URL, data: [Byte]) -> Bool {
+func saveByteArrayToFile(url: URL, data: [Byte]) throws {
     do {
         let data = Data(bytes: data, count: data.count)
         try data.write(to: url)
     } catch {
-        return false
+        throw FileError.fileWriteError
     }
-    return true
 }

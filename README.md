@@ -43,5 +43,5 @@ Battery saves, save states and temprary files (for .zip support) are saved in th
 * The way drawing the screen is currently handled is quite CPU-intesive (being about 30% of the CPU usage). It also isn't always smooth.
 * The way audio is currently played means that even the slightest lag will cause the audio to start sounding scratchy. Pausing and unpausing seems to fix it.
 * The emulator in general is quite resource intensive, using about 70% of the CPU on 5th-gen Core i5. It's only barely better than my Javascript emulator.
-* General usability can be better, like being able to rebind controls, proper error messages, and better zip support.
+* General usability can be better, like being able to rebind controls and better zip support.
 * Only supports the 6 most used mappers. Supporting more would be nice.

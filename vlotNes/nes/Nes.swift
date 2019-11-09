@@ -89,26 +89,30 @@ final class Nes: MemoryHandler {
         mapper!.handleState(s)
     }
     
-    func loadRom(rom: [Byte]) -> Bool {
+    func loadRom(rom: [Byte]) throws {
         if rom.count < 16 {
-            return false
+            throw EmulatorError.romLoadError(details: "Rom file is too small to be valid")
         }
         if rom[0] != 0x4e || rom[1] != 0x45 || rom[2] != 0x53 || rom[3] != 0x1a {
-            return false
+            throw EmulatorError.romLoadError(details: "Rom file does not have a valid iNES-header")
         }
         let header = Header(rom: rom)
         let neededLength = header.chrBase + (0x2000 * header.chrBanks)
         if rom.count < neededLength {
-            return false
+            throw EmulatorError.romLoadError(details: "Rom file is truncated")
         }
         // create mapper
         if let mapper = getMapperForRom(rom: rom, header: header) {
             self.mapper = mapper
         } else {
-            return false
+            throw EmulatorError.romLoadError(details: "Mapper \(header.mapper) is not supported")
         }
         reset(hard: true)
-        return true
+    }
+    
+    func unloadRom() {
+        mapper = nil
+        reset(hard: true)
     }
     
     func cycle() {
@@ -277,11 +281,14 @@ final class Nes: MemoryHandler {
         return mapper!.saveBattery()
     }
     
-    func setBatteryData(data: [Byte]) -> Bool {
+    func setBatteryData(data: [Byte]) throws {
         if !(mapper!.hasBattery) {
-            return true
+            // loading battery for a rom without a battery save is always deemed valid
+            return
         }
-        return mapper!.loadBattery(data)
+        if !(mapper!.loadBattery(data)) {
+            throw EmulatorError.batteryLoadError(details: "Battery data is not valid")
+        }
     }
     
     func getState() -> [Byte] {
@@ -298,34 +305,39 @@ final class Nes: MemoryHandler {
         return s.data
     }
     
-    func setState(state: [Byte]) -> Bool {
+    func setState(state: [Byte]) throws {
         let s = StateHandler(data: state)
         if state.count < 16 {
-            return false
+            throw EmulatorError.stateLoadError(details: "State file is too small to be valid")
         }
         let identifier = s.readInt()
         let version = s.readInt()
         let length = s.readInt()
         let romHash = s.readInt()
-        if identifier != 0x46545356 || version != stateVersion || length != state.count {
-            return false // not a valid state file
+        if identifier != 0x46545356 {
+            throw EmulatorError.stateLoadError(details: "State file is not valid")
+        }
+        if version != stateVersion {
+            throw EmulatorError.stateLoadError(details: "State file was made with a unsupported emulator version")
+        }
+        if length != state.count {
+            throw EmulatorError.stateLoadError(details: "State file is truncated")
         }
         if romHash != getRomHash() {
-            return false // rom hash does not match
+            throw EmulatorError.stateLoadError(details: "State file was not made with this rom")
         }
         let realHeader = mapper!.header.getAsArray()
         var stateHeader: [Int] = [Int](repeating: 0, count: realHeader.count)
         s.handleIntArray(&stateHeader)
         if stateHeader != realHeader {
-            return false // header does not match
+            throw EmulatorError.stateLoadError(details: "State file was made for a different rom-type")
         }
         let mapperVersion = s.readInt()
         if mapperVersion != mapper!.version {
-            return false // mapper version does not match
+            throw EmulatorError.stateLoadError(details: "State file was made with a unsupported mapper version")
         }
         // everything matches, load state
         handleState(s)
-        return true
     }
     
     func getRomHash() -> Int {

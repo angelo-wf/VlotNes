@@ -76,16 +76,30 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
     
     func stopWindow() {
+        unloadRom()
+        lastOpened = nil
+    }
+    
+    func unloadRom() {
         stopLoop()
         if romLoaded {
             // save battery data for the game
             saveBattery(for: lastOpened!)
         }
+        nes.unloadRom()
         pixelView.pixelData.fill(with: 0)
         pixelView.needsDisplay = true
         delegate?.setEmulationState(state: false)
-        lastOpened = nil
-        romLoaded = false
+        romLoaded = false;
+    }
+    
+    func showWarning(text: String, details: String) {
+        let alert = NSAlert()
+        alert.messageText = text
+        alert.informativeText = details
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
     }
     
     func keyPressed(_ event: NSEvent) -> Bool {
@@ -133,24 +147,29 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
     
     func loadRom(path: String) {
-        if romLoaded {
-            // save battery data for previous loaded game
-            saveBattery(for: lastOpened!)
-        }
+        unloadRom()
         var romData: [Byte] = []
         if path.lowercased().suffix(4) == ".zip" {
             // unpack the zip
-            if let unzipData = getRomFromZip(path: path) {
+            do {
+                let unzipData = try getRomFromZip(path: path)
                 romData = unzipData
-            } else {
-                print("Failed to find rom in zip")
-                return
+            } catch FileError.zipLoadError(let details) {
+                showWarning(text: "Failed to load rom from zip", details: details)
+            } catch {
+                showWarning(text: "Failed to load rom from zip", details: "An unknown error occured")
             }
         } else {
             // read the data normally
-            romData = loadFileAsByteArray(path: path)
+            do {
+                let fileData = try loadFileAsByteArray(path: path)
+                romData = fileData
+            } catch {
+                showWarning(text: "Failed to load rom", details: "Failed to read rom file")
+            }
         }
-        if nes.loadRom(rom: romData) {
+        do {
+            try nes.loadRom(rom: romData)
             // loaded rom succesfully
             NSDocumentController.shared.noteNewRecentDocumentURL(URL(fileURLWithPath: path))
             lastOpened = path
@@ -159,8 +178,10 @@ class ViewController: NSViewController, NSWindowDelegate {
             loadBattery(for: lastOpened!)
             delegate?.setEmulationState(state: true)
             startLoop()
-        } else {
-            print("Failed to load rom")
+        } catch EmulatorError.romLoadError(let details) {
+            showWarning(text: "Failed to load rom", details: details)
+        } catch {
+            showWarning(text: "Failed to load rom", details: "An unknown error occured")
         }
     }
     
@@ -258,6 +279,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     
     func saveBattery(for path: String) {
         guard let batteryData = nes.getBatteryData() else {
+            // this game doesn't have battery saves
             return
         }
         let saveName = URL(fileURLWithPath: path).deletingPathExtension().lastPathComponent
@@ -265,10 +287,11 @@ class ViewController: NSViewController, NSWindowDelegate {
             return
         }
         let saveLocation = saveFolderLoc.appendingPathComponent(saveName).appendingPathExtension("srm")
-        if !saveByteArrayToFile(url: saveLocation, data: batteryData) {
-            print("Failed to save battery file to \(saveLocation.path)")
-        } else {
+        do {
+            try saveByteArrayToFile(url: saveLocation, data: batteryData)
             print("Saved battery data to \(saveLocation.path)")
+        } catch {
+            showWarning(text: "Failed to save battery data", details: "Failed to write file")
         }
     }
     
@@ -278,14 +301,18 @@ class ViewController: NSViewController, NSWindowDelegate {
             return
         }
         let saveLocation = saveFolderLoc.appendingPathComponent(saveName).appendingPathExtension("srm")
-        let saveData = loadFileAsByteArray(path: saveLocation.path)
-        if saveData.count == 0 {
+        let saveData = try? loadFileAsByteArray(path: saveLocation.path)
+        if saveData == nil {
+            // no battery save has been saved for this rom yet
             return
         }
-        if !nes.setBatteryData(data: saveData) {
-            print("Failed to load battery file from \(saveLocation.path)")
-        } else {
-            print("Loaded battery data from \(saveLocation.path)")
+        do {
+            try nes.setBatteryData(data: saveData!)
+            print("Loaded battery data from \(saveLocation.path)");
+        } catch EmulatorError.batteryLoadError(let details) {
+            showWarning(text: "Failed to load battery data", details: details)
+        } catch {
+            showWarning(text: "Failed to load battery data", details: "An unknown error occured")
         }
     }
     
@@ -295,10 +322,11 @@ class ViewController: NSViewController, NSWindowDelegate {
             return
         }
         let saveLocation = saveFolderLoc.appendingPathComponent(saveName).appendingPathExtension("vst")
-        if !saveByteArrayToFile(url: saveLocation, data: nes.getState()) {
-            print("Failed to save state file to \(saveLocation.path)")
-        } else {
+        do {
+            try saveByteArrayToFile(url: saveLocation, data: nes.getState())
             print("Saved state data to \(saveLocation.path)")
+        } catch {
+            showWarning(text: "Failed to save state", details: "Failed to write file")
         }
     }
     
@@ -308,20 +336,24 @@ class ViewController: NSViewController, NSWindowDelegate {
             return
         }
         let saveLocation = saveFolderLoc.appendingPathComponent(saveName).appendingPathExtension("vst")
-        let stateData = loadFileAsByteArray(path: saveLocation.path)
-        if stateData.count == 0 {
+        let stateData = try? loadFileAsByteArray(path: saveLocation.path)
+        if stateData == nil {
+            // no state has been made yet
             return
         }
-        if !nes.setState(state: stateData) {
-            print("Failed to load state file from \(saveLocation.path)")
-        } else {
+        do {
+            try nes.setState(state: stateData!)
             print("Loaded state data from \(saveLocation.path)")
+        } catch EmulatorError.stateLoadError(let details) {
+            showWarning(text: "Failed to load state", details: details)
+        } catch {
+            showWarning(text: "Failed to load state", details: "An unknown error occured")
         }
     }
     
-    func getRomFromZip(path: String) -> [Byte]? {
+    func getRomFromZip(path: String) throws -> [Byte] {
         guard let tempDir = getAppSupportDir(subFolder: "temp") else {
-            return nil
+            return []
         }
         let fileManager = FileManager.default
         // first, clear all files currently in the temp directory
@@ -331,8 +363,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                 try fileManager.removeItem(at: tempDir.appendingPathComponent(file))
             }
         } catch {
-            print("Failed to clear temp directory")
-            return nil
+            throw FileError.zipLoadError(details: "Failed to clear temporary directory")
         }
         // then, unpack the zip to the temp directory
         let task = Process()
@@ -341,8 +372,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         do {
             try task.run()
         } catch {
-            print("Failed to unzip")
-            return nil
+            throw FileError.zipLoadError(details: "Failed to unzip this zip file")
         }
         task.waitUntilExit()
         // now, search the temp directory for .nes files and use the first one
@@ -350,18 +380,20 @@ class ViewController: NSViewController, NSWindowDelegate {
         do {
             files = try fileManager.contentsOfDirectory(atPath: tempDir.path)
         } catch {
-            print("Failed to get files in temp directory")
-            return nil
+            throw FileError.zipLoadError(details: "Failed to access the unzipped files")
         }
         for file in files {
             if file.lowercased().suffix(4) == ".nes" {
                 // we found an .nes file, read it
-                let data = loadFileAsByteArray(path: tempDir.appendingPathComponent(file).path)
-                return data
+                do {
+                    let data = try loadFileAsByteArray(path: tempDir.appendingPathComponent(file).path)
+                    return data
+                } catch {
+                    throw FileError.zipLoadError(details: "Failed to read unzipped rom file")
+                }
             }
         }
-        print("No .nes file found")
-        return nil
+        throw FileError.zipLoadError(details: "Failed to find rom in this zip file")
     }
 }
 

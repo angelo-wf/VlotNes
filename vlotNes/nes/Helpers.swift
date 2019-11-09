@@ -87,3 +87,9 @@ struct Header {
         return result
     }
 }
+
+enum EmulatorError: Error {
+    case romLoadError(details: String)
+    case stateLoadError(details: String)
+    case batteryLoadError(details: String)
+}
