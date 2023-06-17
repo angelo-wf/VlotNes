@@ -22,7 +22,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
         if let viewController = viewController {
-            setEmulationState(state: viewController.lastOpened != nil)
+            setEmulationState(state: viewController.romLoaded)
         } else {
             setEmulationState(state: false)
         }
@@ -52,7 +52,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func setPauseText(paused: Bool) {
-        pauseMenuItem.title = paused ? "Continue" : "Pause"
+        pauseMenuItem.title = paused ? "Unpause" : "Pause"
     }
     
     func setEmulationState(state: Bool) {

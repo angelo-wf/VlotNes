@@ -2,7 +2,15 @@
 
 Yet another NES emulator, in Swift.
 
-This is mostly a port of my [Javascript NES emulator](https://github.com/elzo-d/NesJs) except written in Swift as a macOS application.
+## Note
+
+I will probably not continue work on this emulator, as the performance improvement from the Javascript version was suprisingly small. I have some work done on a C-based NES emulator, which I might use as a core to write a Swift/Cocoa-based UI around instead of writing the emulation itself in Swift.
+
+It also does not seem to run properly in fullscreen on newer versions of macOS (atleast Ventura).
+
+## Info
+
+This is mostly a port of my [Javascript NES emulator](https://github.com/angelo-wf/NesJs) except written in Swift as a macOS application.
 
 The CPU has almost all instructions emulated (only the 'unstable' undocumented instructions are not), but it is not cycle-accurate.
 The PPU has full sprite and background rendering, but is also not fully cycle accurate and some edge cases are not handled properly.
